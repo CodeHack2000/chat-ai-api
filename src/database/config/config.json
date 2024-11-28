@@ -1,0 +1,25 @@
+{
+  "development": {
+    "username": "admin_chat",
+    "password": "lFkaX2xXZQj5NiEZKTjlULgkzHPJcGprsA7pXv5ZwAfHt9r3ydf7Dl7WnANjrRSagCAublURxMTZd7xAHZDCnFkbQPkyufrJwSsu3Askc2KdApUFzFFiaqNqWc2Eiom4",
+    "database": "chat-ai_db",
+    "host": "db-container",
+    "dialect": "postgres",
+    "migrationStorageTableName": "migrations",
+    "migrationStorageTableSchema": "chat_ai"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}

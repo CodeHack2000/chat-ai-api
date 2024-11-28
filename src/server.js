@@ -7,12 +7,18 @@ const Utils = require('@utils');
 // Config
 const ServerConfig = require('@config/serverConfig');
 
+// DB
+const DB = require('@models');
+
 // Utils
 const utils = new Utils();
 
 const startServer = async () => {
 
     try {
+
+        await DB.sequelize.authenticate();
+        utils.logger.info('DB synced successfully.');
 
         App.listen(ServerConfig.port, () => {
 

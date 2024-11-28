@@ -1,0 +1,56 @@
+const dbConfig = require('../../config/dbConfig');
+
+module.exports = (sequelize, DataTypes) => {
+
+    const table = sequelize.define('users', {
+
+        id: {
+
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement: true
+        },
+        name: {
+
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        email: {
+
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        password: {
+
+            type: DataTypes.TEXT
+        },
+        avatar: {
+
+            type: DataTypes.BLOB
+        },
+        googleId: {
+
+            type: DataTypes.STRING
+        },
+        emailValidationState: {
+
+            type: DataTypes.STRING,
+            allowNull: false,
+            defaultValue: 'notValidated'
+        },
+        createdAt: {
+            type: DataTypes.DATE,
+            allowNull: false,
+            defaultValue: DataTypes.NOW
+        },
+        updatedAt: {
+            type: DataTypes.DATE
+        },
+    }, {
+        schema: dbConfig.schema,
+        tableName: 'users',
+        timestamps: false
+    });
+
+    return table;
+};
