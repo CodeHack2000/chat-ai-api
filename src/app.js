@@ -14,6 +14,7 @@ const UsersComponent = require('@users');
 const AuthPassComponent = require('@authPass');
 const AuthGoogleComponent = require('@authGoogle');
 const AuthComponent = require('@auth');
+const HistoryComponent = require('@history');
 
 const ErrorHandler = require('@shared/middlewares/errorHandlerMiddleware');
 
@@ -28,6 +29,7 @@ const _utils = {
 
 // DB
 const usersData = new UsersComponent(_utils);
+const historyData = new HistoryComponent(_utils);
 
 // DB pack
 const _db = {
@@ -44,7 +46,7 @@ const _external = {
 
 // Internal
 const auth = new AuthComponent({  Logger: utils.logger });
-const openAi = new OpenAiComponent(_utils, _external, { AuthMiddleware: auth.middlewares });
+const openAi = new OpenAiComponent(_utils, _external, { AuthMiddleware: auth.middlewares }, { HistoryService: historyData.historyService });
 const authPass = new AuthPassComponent(_utils, _db);
 const authGoogle = new AuthGoogleComponent({  Logger: utils.logger }, _db);
 

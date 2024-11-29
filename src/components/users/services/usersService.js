@@ -1,14 +1,16 @@
 const Moment = require('moment');
 
 const UsersDB = require('../db/usersDB');
+const UsersMapper = require('../mapper/usersMapper');
 
 class UsersService {
 
     constructor(Utils) {
 
-        const { UsersMapper, CommonMapper } = Utils;
+        const { Logger, CommonMapper } = Utils;
 
-        this.usersMapper = UsersMapper;
+        this.logger = Logger;
+        this.usersMapper = new UsersMapper(Utils);
         this.commonMapper = CommonMapper;
     }
 
@@ -18,6 +20,8 @@ class UsersService {
      * @returns {Promise<Object>} user with the given googleId
      */
     async getUserByGoogleId(profile) {
+
+        this.logger.info('<UsersService> - Getting user by google id');
 
         const mappedGoogleId = this.commonMapper.toString( profile?.id );
 
@@ -31,6 +35,8 @@ class UsersService {
      */
     async insGoogleUser(profile) {
 
+        this.logger.info('<UsersService> - Getting user by google id');
+
         const mappedUser = this.usersMapper.insUserByGoogle( profile );
 
         return await UsersDB.insUser( mappedUser );
@@ -42,6 +48,8 @@ class UsersService {
      * @returns {Promise<number>} id of the new user
      */
     async insUser( user ) {
+
+        this.logger.info('<UsersService> - Inserting user');
 
         const mappedUser = this.usersMapper.insUser( user );
 
@@ -55,6 +63,8 @@ class UsersService {
      */
     async getUserByEmail( email ) {
 
+        this.logger.info('<UsersService> - Getting user by email');
+
         const mappedEmail = this.commonMapper.toString( email );
 
         return await UsersDB.getUserByEmail( mappedEmail );
@@ -67,6 +77,8 @@ class UsersService {
      */
     async updUser( user ) {
 
+        this.logger.info('<UsersService> - Updating user');
+
         const mappedUser = this.usersMapper.updUser( user );
 
         return await UsersDB.updUser( mappedUser );
@@ -77,6 +89,8 @@ class UsersService {
      * @returns {Promise<Array<Object>>} array of users that have not confirmed their email
      */
     async getNotConfirmedUsers() {
+
+        this.logger.info('<UsersService> - Getting not confirmed users');
 
         const updatedAtDate = Moment().subtract(30, 'minutes').toDate();
 
@@ -89,6 +103,8 @@ class UsersService {
      * @returns {Promise<Object>} user with the given id
      */
     async getUserById(id) {
+
+        this.logger.info('<UsersService> - Getting user by id');
 
         const mappedId = this.commonMapper.toString( id );
 

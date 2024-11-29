@@ -4,13 +4,14 @@ const config = require('../config/config');
 const InventoryService = require('../services/inventoryService');
 const ChatService = require('../services/chatService');
 const SessionsHistoryService = require('../services/sessionsHistoryService');
+const DbHistoryService = require('../services/dbHistoryService');
 
 class OpenAiController {
 
-    constructor(Utils, External) {
+    constructor(Utils, External, DB) {
 
         const { Logger } = Utils;
-        const {  ScrapingApiExternalService } = External;
+        const { ScrapingApiExternalService } = External;
 
         this.logger = Logger;
         this.scrapingApiExternalService = ScrapingApiExternalService;
@@ -18,6 +19,7 @@ class OpenAiController {
         this.inventoryService = new InventoryService(Utils);
         this.chatService = new ChatService(Utils);
         this.sessionHistoryService = SessionsHistoryService;
+        this.dbHistoryService = new DbHistoryService(Utils, DB);
 
         this.openAi = new OpenAI({
             apiKey: config.apiKey
@@ -25,7 +27,6 @@ class OpenAiController {
         this.mappedBasePromt = '';
         this.categories = [];
 
-        //! CORRIGIR
         this._initBasePrompt().then(() => this.logger.info('<OpenAiController> - Base prompt mapped'));
     }
 
@@ -93,16 +94,6 @@ class OpenAiController {
                 ]
             });
 
-            /*const response = {
-                choices: [
-                    {
-                        message: {
-                            content: 'Para aliviar a irritação na garganta, pode experimentar as seguintes medidas:\n\n- Beba líquidos quentes, como chá com mel, para acalmar a garganta.\n- Faça gargarejos com água morna e sal para ajudar a reduzir a inflamação.\n- Use pastilhas para a garganta que podem ajudar a aliviar a dor e a irritação.\n- Mantenha o ambiente humidificado para evitar que a garganta fique seca.\n\nSe a irritação persistir ou se acompanhar outros sintomas mais graves, como febre alta ou dificuldade em engolir, recomendo que consulte o seu médico de família.  \n  \n!!![{\'utilizador\': \'Irritação na garganta\', \'chat\': \'Sugestões para aliviar a irritação.\'}]\n\n'
-                        }
-                    }
-                ]
-            };*/
-
             console.log(response?.choices?.[0]?.message?.content);
 
             //await new Promise(resolve => setTimeout(resolve, 2000));
@@ -132,6 +123,16 @@ class OpenAiController {
 
                 result.message = response?.choices?.[0]?.message?.content;
             }
+
+            console.log('User ' + JSON.stringify(req.user));
+
+            await this.dbHistoryService.insConversationIntoHistory(
+                {
+                    userMessage,
+                    botMessage: result.message
+                },
+                req.user.id
+            );
 
             result.message = this.chatService.cleanFinalMessage(result.message);
             result.status = 200;

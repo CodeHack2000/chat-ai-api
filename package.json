@@ -19,7 +19,8 @@
     "@auth": "src/components/auth",
     "@authGoogle": "src/components/authGoogle",
     "@authPass": "src/components/authPass",
-    "@users": "src/components/users"
+    "@users": "src/components/users",
+    "@history": "src/components/history"
   },
   "author": "Vladyslav Safronov",
   "license": "ISC",

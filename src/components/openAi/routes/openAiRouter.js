@@ -4,14 +4,14 @@ const OpenAiController = require('../controllers/openAiController');
 
 class OpenAiRouter {
 
-    constructor(Utils, External, Middlewares) {
+    constructor(Utils, External, Middlewares, DB) {
 
         const { AuthMiddleware } = Middlewares;
 
         this.authMiddleware = AuthMiddleware;
         this.router = Express.Router();
 
-        this.controller = new OpenAiController(Utils, External);
+        this.controller = new OpenAiController(Utils, External, DB);
 
         this._sendMessageToModel();
     }

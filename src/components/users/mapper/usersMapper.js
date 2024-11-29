@@ -36,7 +36,7 @@ class UsersMapper {
     updUser(user) {
 
         return {
-            id: this.commonMapper.toString( user?.id ),
+            id: user?.id,
             name: this.commonMapper.toString( user?.name ),
             email: this.commonMapper.toString( user?.email ),
             password: this.commonMapper.toString( user?.password ),
