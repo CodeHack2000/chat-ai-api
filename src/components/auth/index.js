@@ -6,7 +6,7 @@ class Auth {
     constructor(Utils) {
 
         this.router = (new AuthRouter(Utils)).router;
-        this.handleSessionMessagesMiddleware = AuthMiddleware.handleSessionMessages;
+        this.middlewares = AuthMiddleware;
     }
 }
 

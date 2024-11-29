@@ -27,7 +27,7 @@ class AuthMiddleware {
         const msgs = req?.session?.messags || [];
         res.locals.messages = msgs;
         res.locals.hasMessages = !! msgs?.length;
-        req.session.messags = [];
+        req.session.messages = [];
         next();
     }
 }

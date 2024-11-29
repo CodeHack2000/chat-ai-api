@@ -2,9 +2,9 @@ const OpenAiRouter = require('./routes/openAiRouter');
 
 class OpenAi {
 
-    constructor(Utils, External) {
+    constructor(Utils, External, Middlewares) {
 
-        this.router = (new OpenAiRouter(Utils, External)).router;
+        this.router = (new OpenAiRouter(Utils, External, Middlewares)).router;
     }
 }
 

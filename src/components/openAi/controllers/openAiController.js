@@ -3,6 +3,7 @@ const { OpenAI } = require('openai');
 const config = require('../config/config');
 const InventoryService = require('../services/inventoryService');
 const ChatService = require('../services/chatService');
+const SessionsHistoryService = require('../services/sessionsHistoryService');
 
 class OpenAiController {
 
@@ -16,6 +17,7 @@ class OpenAiController {
 
         this.inventoryService = new InventoryService(Utils);
         this.chatService = new ChatService(Utils);
+        this.sessionHistoryService = SessionsHistoryService;
 
         this.openAi = new OpenAI({
             apiKey: config.apiKey
@@ -24,9 +26,7 @@ class OpenAiController {
         this.categories = [];
 
         //! CORRIGIR
-        //this._initBasePrompt().then(() => this.logger.info('<OpenAiController> - Base prompt mapped'));
-
-        this.history = [];
+        this._initBasePrompt().then(() => this.logger.info('<OpenAiController> - Base prompt mapped'));
     }
 
     async _initBasePrompt() {
@@ -64,9 +64,17 @@ class OpenAiController {
 
         try {
 
+            this.logger.info('<OpenAiController> - Obtaining user history from session...');
+
+            const userHistoryFromSession = this.sessionHistoryService.getHistoryFromUserSession(req.session);
+
+            const userMessage = this.chatService.setHistoryInMessage(req.body.message, userHistoryFromSession);
+
+            console.log(userMessage);
+
             this.logger.info('<OpenAiController> - Sending message to model...');
 
-            /*const response = await this.openAi.chat.completions.create({
+            const response = await this.openAi.chat.completions.create({
                 model: 'gpt-4o-mini',
                 temperature: 0.5,
                 max_tokens: 1024,
@@ -76,16 +84,16 @@ class OpenAiController {
                 messages: [
                     {
                         role: 'system',
-                        content: config.basePrompt
+                        content: this.mappedBasePromt
                     },
                     {
                         role: 'user',
-                        content: req.body.message
+                        content: userMessage
                     }
                 ]
-            });*/
+            });
 
-            const response = {
+            /*const response = {
                 choices: [
                     {
                         message: {
@@ -93,20 +101,23 @@ class OpenAiController {
                         }
                     }
                 ]
-            };
+            };*/
 
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            console.log(response?.choices?.[0]?.message?.content);
+
+            //await new Promise(resolve => setTimeout(resolve, 2000));
 
             this.logger.info('<OpenAiController> - Message sent to model.');
 
-            this.history.push(...this.chatService.getHistoryFromMessage(response?.choices?.[0]?.message?.content));
+            const userHistoryFromMessage = this.chatService.getHistoryFromMessage(response?.choices?.[0]?.message?.content);
+
+            this.logger.info('<OpenAiController> - User history parsed from message.');
+
+            this.sessionHistoryService.saveHistoryInUserSession(req.session, userHistoryFromMessage);
 
             const regex = /###\[(.*?)\]/g;
             const match = regex.exec(response?.choices?.[0]?.message?.content);
 
-            console.log(match);
-
-            //! CORRIGIR
             if (match?.[1]) {
 
                 const products = match[1]
@@ -122,6 +133,7 @@ class OpenAiController {
                 result.message = response?.choices?.[0]?.message?.content;
             }
 
+            result.message = this.chatService.cleanFinalMessage(result.message);
             result.status = 200;
         }
         catch (error) {
