@@ -1,7 +1,5 @@
 'use strict';
 
-const dbConfig = require('../../config/dbConfig');
-
 module.exports = {
     up: (queryInterface, Sequelize) => {
         return queryInterface.createTable('session', {
@@ -16,7 +14,6 @@ module.exports = {
                 type: Sequelize.DATE
             }
         }, {
-            schema: dbConfig.schema,
             tableName: 'session',
             timestamps: false
         });

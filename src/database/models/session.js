@@ -16,7 +16,6 @@ module.exports = (sequelize, DataTypes, _) => {
             type: DataTypes.DATE
         }
     }, {
-        schema: dbConfig.schema,
         tableName: 'session',
         timestamps: false
     });
