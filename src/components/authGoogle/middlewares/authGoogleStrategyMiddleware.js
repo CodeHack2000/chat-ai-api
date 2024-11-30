@@ -83,7 +83,8 @@ class AuthGoogleStrategyMiddleware {
                 this.logger.debug('<GoogleAuthMiddleware> - user: ' + user?.id);
                 return done(null, {
                     id: user.id,
-                    name: user.name
+                    name: user.name,
+                    profile: user.profile
                 });
             }
             catch (error) {
@@ -97,7 +98,7 @@ class AuthGoogleStrategyMiddleware {
         // Serializes the user for the session
         Passport.serializeUser((user, done) => {
 
-            done(null, { id: user.id, name: user.name });
+            done(null, { id: user.id, name: user.name, profile: user.profile });
         });
 
         // Deserializes the user of the session
@@ -108,7 +109,8 @@ class AuthGoogleStrategyMiddleware {
                 const user = await this.usersService.getUserById(user?.id);
                 done(null, {
                     id: user.id,
-                    name: user.name
+                    name: user.name,
+                    profile: user.profile
                 });
             }
             catch (error) {

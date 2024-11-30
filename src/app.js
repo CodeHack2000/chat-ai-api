@@ -36,8 +36,13 @@ const _db = {
     UsersService: usersData.usersService
 };
 
+// Auth
+const auth = new AuthComponent({  Logger: utils.logger });
+const authPass = new AuthPassComponent(_utils, _db);
+const authGoogle = new AuthGoogleComponent({  Logger: utils.logger }, _db);
+
 // External
-const scrapingApiExternal = new ScrapingApiExternalComponent({ Logger: utils.logger });
+const scrapingApiExternal = new ScrapingApiExternalComponent({ Logger: utils.logger }, { AuthJsonWebTokenService: auth.authJsonWebTokenService });
 
 // External pack
 const _external = {
@@ -45,10 +50,7 @@ const _external = {
 };
 
 // Internal
-const auth = new AuthComponent({  Logger: utils.logger });
 const openAi = new OpenAiComponent(_utils, _external, { AuthMiddleware: auth.middlewares }, { HistoryService: historyData.historyService });
-const authPass = new AuthPassComponent(_utils, _db);
-const authGoogle = new AuthGoogleComponent({  Logger: utils.logger }, _db);
 
 const app = Express();
 

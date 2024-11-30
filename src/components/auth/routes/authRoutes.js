@@ -1,18 +1,30 @@
 const Express = require('express');
 
-const AuthMiddleware = require('../middlewares/authMiddleware');
 const AuthController = require('../controllers/authController');
 
 class AuthRoutes {
 
-    constructor(Utils) {
+    constructor(Utils, Tools, Middlwares) {
+
+        const { AuthMiddleware } = Middlwares;
 
         this.router = Express.Router();
-        this.controller = new AuthController(Utils);
+        this.controller = new AuthController(Utils, Tools);
+        this.authMiddleware = AuthMiddleware;
 
+        this._generateInternalToken();
         this._loginRoute();
         this._homeRoute();
         this._logoutRoute();
+    }
+
+    _generateInternalToken() {
+
+        this.router.get(
+            '/auth/generate-internal-token',
+            (req, res, next) => this.authMiddleware.isLoggedInAdmin(req, res, next),
+            (req, res) => this.controller.generateInternalToken(req, res)
+        );
     }
 
     _loginRoute() {
@@ -27,7 +39,7 @@ class AuthRoutes {
 
         this.router.get(
             '/home',
-            (req, res, next) => AuthMiddleware.isLoggedIn(req, res, next),
+            (req, res, next) => this.authMiddleware.isLoggedIn(req, res, next),
             (req, res) => this.controller.home(req, res)
         );
     }

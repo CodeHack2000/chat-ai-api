@@ -1,3 +1,5 @@
+const JsonWebTokenService = require('../services/jsonWebTokenService');
+
 class AuthController {
 
     constructor(Utils) {
@@ -5,6 +7,8 @@ class AuthController {
         const { Logger } = Utils;
 
         this.logger = Logger;
+
+        this.jsonWebTokenService = new JsonWebTokenService(Utils);
     }
 
     /**
@@ -77,6 +81,24 @@ class AuthController {
 
         res.render('login');
     };
+
+    /**
+     * Generates a JSON Web Token for internal use.
+     * This function is to be used as an express.js route handler.
+     * @param {Request} req express request
+     * @param {Response} res express response
+     * @returns {Promise<Response>} JSON Web Token for internal use
+     */
+    generateInternalToken(req, res) {
+
+        this.logger.info('<Auth> - Start Generate Internal Token');
+
+        const token = this.jsonWebTokenService.generateInternalToken(req.user);
+
+        res
+            .status(200)
+            .json({ token });
+    }
 }
 
 module.exports = AuthController;

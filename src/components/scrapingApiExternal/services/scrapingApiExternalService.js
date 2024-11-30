@@ -1,17 +1,17 @@
 const Axios = require('axios');
 
 const config = require('../config/config');
-const JsonWebTokenService = require('../services/jsonWebTokenService');
 
 class ScrapingApiExternalService {
 
-    constructor(Utils) {
+    constructor(Utils, Tools) {
 
         const { Logger } = Utils;
+        const { AuthJsonWebTokenService } = Tools;
 
         this.logger = Logger;
 
-        this.jsonWebTokenService = new JsonWebTokenService(Utils);
+        this.authJsonWebTokenService = AuthJsonWebTokenService;
 
         this.categories = [];
 
@@ -21,7 +21,7 @@ class ScrapingApiExternalService {
     _getInternalHeaders() {
 
         return {
-            authorization: `Bearer ${this.jsonWebTokenService.generateInternalApiToken()}`
+            authorization: `Bearer ${this.authJsonWebTokenService.generateInternalApiToken()}`
         };
     }
 

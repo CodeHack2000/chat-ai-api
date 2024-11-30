@@ -14,6 +14,19 @@ class AuthMiddleware {
     }
 
     /**
+     * Checks if the request is authenticated with a user having an 'ADM' profile.
+     * If so, calls next(), otherwise sends a 401 Unauthorized response.
+     * @param {Request} req express request
+     * @param {Response} res express response
+     * @param {NextFunction} next express next function
+     * @returns {undefined}
+     */
+    static isLoggedInAdmin(req, res, next) {
+
+        req.user?.profile === 'ADM' ? next() : res.sendStatus(401);
+    }
+
+    /**
      * Handles session messages by transferring them to the response locals.
      * This function is to be used as an Express.js middleware.
      * 

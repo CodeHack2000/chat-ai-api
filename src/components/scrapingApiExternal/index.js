@@ -2,9 +2,9 @@ const ScrapingApiExternalService = require('./services/scrapingApiExternalServic
 
 class ScrapingApiExternal {
 
-    constructor(Utils) {
+    constructor(Utils, Tools) {
 
-        this.scrapingApiExternalService = new ScrapingApiExternalService(Utils);
+        this.scrapingApiExternalService = new ScrapingApiExternalService(Utils, Tools);
     }
 }
 

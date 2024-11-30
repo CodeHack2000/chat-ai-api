@@ -71,8 +71,6 @@ class OpenAiController {
 
             const userMessage = this.chatService.setHistoryInMessage(req.body.message, userHistoryFromSession);
 
-            console.log(userMessage);
-
             this.logger.info('<OpenAiController> - Sending message to model...');
 
             const response = await this.openAi.chat.completions.create({
@@ -93,10 +91,6 @@ class OpenAiController {
                     }
                 ]
             });
-
-            console.log(response?.choices?.[0]?.message?.content);
-
-            //await new Promise(resolve => setTimeout(resolve, 2000));
 
             this.logger.info('<OpenAiController> - Message sent to model.');
 
@@ -123,8 +117,6 @@ class OpenAiController {
 
                 result.message = response?.choices?.[0]?.message?.content;
             }
-
-            console.log('User ' + JSON.stringify(req.user));
 
             await this.dbHistoryService.insConversationIntoHistory(
                 {

@@ -56,7 +56,8 @@ class AuthPassStrategyMiddleware {
         
                 return done(null, {
                     id: user.id,
-                    name: user.name
+                    name: user.name,
+                    profile: user.profile,
                 });
             }
             catch (error) {
@@ -70,7 +71,7 @@ class AuthPassStrategyMiddleware {
         // Serializes the user for the session
         Passport.serializeUser((user, done) => {
         
-            done(null, { id: user.id, name: user.name });
+            done(null, { id: user.id, name: user.name, profile: user.profile });
         });
         
         // Deserializes the user of the session
@@ -81,7 +82,8 @@ class AuthPassStrategyMiddleware {
                 const _user = await this.usersService.getUserById(user?.id);
                 done(null, {
                     id: _user.id,
-                    name: _user.name
+                    name: _user.name,
+                    profile: _user.profile
                 });
             }
             catch (error) {
