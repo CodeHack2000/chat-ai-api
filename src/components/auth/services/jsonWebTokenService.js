@@ -40,8 +40,9 @@ class JsonWebTokenService {
 
         return JWT.sign({
             iss: config.host,
-            aud: config.scrapingApiHost
-        }, config.internalApiSecret, { expiresIn: '30m' } );
+            aud: config.scrapingApiHost,
+            sub: user.id
+        }, config.internalSecret, { expiresIn: '30m' } );
     }
 }
 
