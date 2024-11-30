@@ -23,7 +23,7 @@ class AuthMiddleware {
      */
     static isLoggedInAdmin(req, res, next) {
 
-        req.user?.profile === 'ADM' ? next() : res.sendStatus(401);
+        req.user?.profiles?.includes('ADM') ? next() : res.sendStatus(401);
     }
 
     /**

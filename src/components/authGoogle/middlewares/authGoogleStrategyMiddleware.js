@@ -84,7 +84,7 @@ class AuthGoogleStrategyMiddleware {
                 return done(null, {
                     id: user.id,
                     name: user.name,
-                    profile: user.profile
+                    profiles: user.profiles
                 });
             }
             catch (error) {
@@ -98,7 +98,7 @@ class AuthGoogleStrategyMiddleware {
         // Serializes the user for the session
         Passport.serializeUser((user, done) => {
 
-            done(null, { id: user.id, name: user.name, profile: user.profile });
+            done(null, { id: user.id, name: user.name, profiles: user.profiles });
         });
 
         // Deserializes the user of the session
@@ -110,7 +110,7 @@ class AuthGoogleStrategyMiddleware {
                 done(null, {
                     id: user.id,
                     name: user.name,
-                    profile: user.profile
+                    profiles: user.profiles
                 });
             }
             catch (error) {

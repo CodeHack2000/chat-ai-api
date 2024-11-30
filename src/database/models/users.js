@@ -38,10 +38,10 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             defaultValue: 'notValidated'
         },
-        profile: {
-            type: DataTypes.STRING,
+        profiles: {
+            type: DataTypes.ARRAY(DataTypes.STRING),
             allowNull: false,
-            defaultValue: 'USER'
+            defaultValue: ['USER']
         },
         createdAt: {
             type: DataTypes.DATE,

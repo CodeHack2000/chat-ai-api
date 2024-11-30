@@ -6,18 +6,18 @@ module.exports = {
     up: (queryInterface, Sequelize) => {
         return queryInterface.addColumn(
             { tableName: 'users', schema: dbConfig.schema },
-            'profile', 
+            'profiles', 
             {
-                type: Sequelize.STRING,
+                type: Sequelize.ARRAY(Sequelize.STRING),
                 allowNull: false,
-                defaultValue: 'USER'
+                defaultValue: ['USER']
             }
         );
     },
     down: (queryInterface) => {
         return queryInterface.removeColumn(
             { tableName: 'users', schema: dbConfig.schema },
-            'profile'
+            'profiles'
         );
     }
 };

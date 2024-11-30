@@ -57,7 +57,7 @@ class AuthPassStrategyMiddleware {
                 return done(null, {
                     id: user.id,
                     name: user.name,
-                    profile: user.profile,
+                    profiles: user.profiles,
                 });
             }
             catch (error) {
@@ -71,7 +71,7 @@ class AuthPassStrategyMiddleware {
         // Serializes the user for the session
         Passport.serializeUser((user, done) => {
         
-            done(null, { id: user.id, name: user.name, profile: user.profile });
+            done(null, { id: user.id, name: user.name, profiles: user.profiles });
         });
         
         // Deserializes the user of the session
@@ -83,7 +83,7 @@ class AuthPassStrategyMiddleware {
                 done(null, {
                     id: _user.id,
                     name: _user.name,
-                    profile: _user.profile
+                    profiles: _user.profiles
                 });
             }
             catch (error) {
