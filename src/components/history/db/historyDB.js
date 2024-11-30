@@ -43,6 +43,22 @@ class HistoryDB {
 
         return await history.findByPk(id);
     }
+
+    /**
+     * Get all the history for a given user
+     * @param {uuid} userId id of the user
+     * @returns {Promise<Array<Object>>} all the history for the given user, ordered by createdAt DESC
+     */
+    static async getAllUserHistory(userId) {
+
+        return await history.findAll({
+
+            where: {
+                userId
+            },
+            order: [['createdAt', 'DESC']]
+        });
+    }
 }
 
 module.exports = HistoryDB;

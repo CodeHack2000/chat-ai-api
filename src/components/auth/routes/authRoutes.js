@@ -21,7 +21,7 @@ class AuthRoutes {
     _generateInternalToken() {
 
         this.router.get(
-            '/auth/generate-internal-token',
+            '/auth/generateInternalToken',
             (req, res, next) => this.authMiddleware.isLoggedInAdmin(req, res, next),
             (req, res) => this.controller.generateInternalToken(req, res)
         );

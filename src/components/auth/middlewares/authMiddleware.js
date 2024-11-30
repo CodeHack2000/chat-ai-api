@@ -10,7 +10,7 @@ class AuthMiddleware {
      */
     static isLoggedIn(req, res, next) {
 
-        req.user ? next() : res.sendStatus(401);
+        req.user?.profiles?.includes('USER') ? next() : res.sendStatus(401);
     }
 
     /**
@@ -24,6 +24,19 @@ class AuthMiddleware {
     static isLoggedInAdmin(req, res, next) {
 
         req.user?.profiles?.includes('ADM') ? next() : res.sendStatus(401);
+    }
+
+    /**
+     * Checks if the request is authenticated with a user having a 'VIP' profile.
+     * If so, calls next(), otherwise sends a 401 Unauthorized response.
+     * @param {Request} req express request
+     * @param {Response} res express response
+     * @param {NextFunction} next express next function
+     * @returns {undefined}
+     */
+    static isLoggedInVip(req, res, next) {
+
+        req.user?.profiles?.includes('VIP') ? next() : res.sendStatus(401);
     }
 
     /**

@@ -54,6 +54,21 @@ class HistoryService {
 
         return await HistoryDB.getHistoryById( mappedId );
     }
+
+    /**
+     * Get all the history for a given user
+     * @param {uuid} userId id of the user
+     * @returns {Promise<Array<Object>>} all the history for the given user, ordered by createdAt DESC
+     */
+    async getAllUserHistory(userId) {
+
+        this.logger.info( '<HistoryService> - Getting all user history' );
+
+        const mappedUserId = this.commonMapper.toString( userId );
+
+        const userHistories = await HistoryDB.getAllUserHistory( mappedUserId );
+        return userHistories?.map((history) => this.historyMapper.getUserHistory( history?.dataValues ));
+    }
 }
 
 module.exports = HistoryService;

@@ -29,7 +29,6 @@ const _utils = {
 
 // DB
 const usersData = new UsersComponent(_utils);
-const historyData = new HistoryComponent(_utils);
 
 // DB pack
 const _db = {
@@ -50,7 +49,8 @@ const _external = {
 };
 
 // Internal
-const openAi = new OpenAiComponent(_utils, _external, { AuthMiddleware: auth.middlewares }, { HistoryService: historyData.historyService });
+const history = new HistoryComponent(_utils, { AuthMiddleware: auth.middlewares } );
+const openAi = new OpenAiComponent(_utils, _external, { AuthMiddleware: auth.middlewares }, { HistoryService: history.historyService });
 
 const app = Express();
 
@@ -91,5 +91,6 @@ app.use('/', auth.router);
 app.use('/auth/pass', authPass.router);
 app.use('/auth/google', authGoogle.router);
 app.use('/openAi', openAi.router);
+app.use('/history', history.router);
 
 module.exports = app;
