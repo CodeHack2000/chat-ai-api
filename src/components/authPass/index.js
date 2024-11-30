@@ -4,9 +4,9 @@ const AuthPassStrategy = require('./middlewares/authPassStrategyMiddleware');
 
 class AuthPass {
 
-    constructor(Utils, DB) {
+    constructor(Utils, DB, Middlewares) {
 
-        this.router = (new AuthPassRouter(Utils, DB)).router;
+        this.router = (new AuthPassRouter(Utils, DB, Middlewares)).router;
         this.jobs = new AuthPassJobs(Utils, DB);
         this.strategy = new AuthPassStrategy(Utils, DB);
     }

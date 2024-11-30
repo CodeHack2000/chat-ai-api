@@ -16,7 +16,7 @@ const AuthGoogleComponent = require('@authGoogle');
 const AuthComponent = require('@auth');
 const HistoryComponent = require('@history');
 
-const ErrorHandler = require('@shared/middlewares/errorHandlerMiddleware');
+const SharedMiddlewares = require('@shared/middlewares');
 
 // Utils
 const utils = new UtilsComponent();
@@ -37,8 +37,14 @@ const _db = {
 
 // Auth
 const auth = new AuthComponent({  Logger: utils.logger });
-const authPass = new AuthPassComponent(_utils, _db);
+const authPass = new AuthPassComponent(_utils, _db, { ImageFormHandlingMiddleware: SharedMiddlewares.imageFormHandlingMiddleware, SchemaValidationMiddleware: SharedMiddlewares.schemaValidationMiddleware });
 const authGoogle = new AuthGoogleComponent({  Logger: utils.logger }, _db);
+
+// Middlewares pack
+const _middlewares = {
+    AuthMiddleware: auth.middlewares,
+    SchemaValidationMiddleware: SharedMiddlewares.schemaValidationMiddleware
+};
 
 // External
 const scrapingApiExternal = new ScrapingApiExternalComponent({ Logger: utils.logger }, { AuthJsonWebTokenService: auth.authJsonWebTokenService });
@@ -49,8 +55,8 @@ const _external = {
 };
 
 // Internal
-const history = new HistoryComponent(_utils, { AuthMiddleware: auth.middlewares } );
-const openAi = new OpenAiComponent(_utils, _external, { AuthMiddleware: auth.middlewares }, { HistoryService: history.historyService });
+const history = new HistoryComponent(_utils, _middlewares );
+const openAi = new OpenAiComponent(_utils, _external, _middlewares, { HistoryService: history.historyService });
 
 const app = Express();
 
@@ -83,7 +89,7 @@ app.set('view engine', 'ejs');
 app.use(Passport.session());
 
 // Middlewares
-app.use(ErrorHandler);
+app.use(SharedMiddlewares.errorHandlerMiddleware);
 app.use(auth.middlewares.handleSessionMessages);
 
 // Routes
