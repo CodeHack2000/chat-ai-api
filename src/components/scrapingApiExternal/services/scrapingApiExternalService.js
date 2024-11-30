@@ -1,6 +1,7 @@
 const Axios = require('axios');
 
 const config = require('../config/config');
+const JsonWebTokenService = require('../services/jsonWebTokenService');
 
 class ScrapingApiExternalService {
 
@@ -10,9 +11,18 @@ class ScrapingApiExternalService {
 
         this.logger = Logger;
 
+        this.jsonWebTokenService = new JsonWebTokenService(Utils);
+
         this.categories = [];
 
         this._getAllInventoryCategories().then(() => this.logger.info(`<ScrapingApiExternalService> - Obtained ${this.categories.length} categories`));
+    }
+
+    _getInternalHeaders() {
+
+        return {
+            authorization: `Bearer ${this.jsonWebTokenService.generateInternalApiToken()}`
+        };
     }
 
     /**
@@ -29,8 +39,9 @@ class ScrapingApiExternalService {
             this.logger.info('<ScrapingApiExternalService> - Getting all inventory categories...');
 
             const url = `http://${config.scrapingApiHost}:${config.scrapingApiPort}/inventoryExt/getAllCategories`;
+            const headers = this._getInternalHeaders();
 
-            const response = await Axios.get(url);
+            const response = await Axios.get(url, { headers });
 
             this.categories.push(...response.data);
         }
@@ -55,8 +66,9 @@ class ScrapingApiExternalService {
             this.logger.info('<ScrapingApiExternalService> - Verifying products...');
 
             const url = `http://${config.scrapingApiHost}:${config.scrapingApiPort}/inventoryExt/verifyProducts`;
+            const headers = this._getInternalHeaders();
 
-            const response = await Axios.post(url, { products });
+            const response = await Axios.post(url, { products }, { headers });
 
             verifiedProducts.push(...response.data);
 
