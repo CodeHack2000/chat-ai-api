@@ -3,6 +3,7 @@ const Session = require('express-session');
 const Passport = require('passport');
 const PostgresqlStore = require('connect-pg-simple')(Session);
 const Path = require('path');
+const Cors = require('cors');
 
 const serverConfig = require('@config/serverConfig');
 const dbConfig = require('@config/dbConfig');
@@ -80,12 +81,17 @@ app.use(Session({
 // Config
 app.disable('x-powered-by');
 
+const corsConfig = {
+    origin: `http://${serverConfig.frontEndHost}:${serverConfig.frontEndPort}`,
+    method: 'GET, POST, PUT, DELETE',
+    allowedHeaders: 'Content-Type, Authorization',
+    credentials: true
+};
+
 // Middleware
-//app.use(Cors()); // Recomendado usar apenas nas rotas que quero tornar públicas
+app.use(Cors(corsConfig)); // Recomendado usar apenas nas rotas que quero tornar públicas
 app.use(Express.json());
 app.use(Express.urlencoded({ extended: false }));
-app.set('views', Path.join(__dirname, './components/shared/views'));
-app.set('view engine', 'ejs');
 app.use(Passport.session());
 
 // Middlewares

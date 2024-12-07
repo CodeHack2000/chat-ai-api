@@ -16,6 +16,7 @@ class AuthRoutes {
         this._loginRoute();
         this._homeRoute();
         this._logoutRoute();
+        this._isAuthenticated();
     }
 
     _generateInternalToken() {
@@ -49,6 +50,15 @@ class AuthRoutes {
         this.router.post(
             '/logout',
             (req, res, next) => this.controller.logout(req, res, next)
+        );
+    }
+
+    _isAuthenticated() {
+
+        this.router.get(
+            '/isAuthenticated',
+            (req, res, next) => this.authMiddleware.isLoggedIn(req, res, next),
+            (req, res) => this.controller.isAuthenticated(req, res)
         );
     }
 }

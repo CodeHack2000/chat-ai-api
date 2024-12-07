@@ -1,6 +1,8 @@
 const Express = require('express');
 const Passport = require('passport');
 
+const serverConfig = require('@config/serverConfig');
+
 const AuthGoogleController = require('../controllers/authGoogleController');
 
 class AuthGoogleRouter {
@@ -31,10 +33,10 @@ class AuthGoogleRouter {
             Passport.authenticate('google', {
 
                 // If the entity is successfully authenticated
-                successRedirect: '/home',
+                successRedirect: `http://${serverConfig.frontEndHost}:${serverConfig.frontEndPort}/chat`,
         
                 // If the entity fails in authenticate
-                failureRedirect: '/auth/google/failure'
+                failureRedirect: `http://${serverConfig.frontEndHost}:${serverConfig.frontEndPort}/auth/google/failure`
             })
         );
     }

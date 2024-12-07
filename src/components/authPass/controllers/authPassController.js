@@ -164,7 +164,7 @@ class AuthPassController {
 
         this.logger.info('<AuthPass> - Start Login');
 
-        return res.redirect('/home');
+        return res.json({ message: 'This route should be handled by Angular!' });
     }
 }
 

@@ -66,7 +66,7 @@ class AuthController {
 
         this.logger.info('<Auth> - Start Home');
 
-        res.render('home', { name: req?.user?.name });
+        res.json({ message: 'This route should be handled by Angular!' });
     };
 
     /**
@@ -79,7 +79,7 @@ class AuthController {
 
         this.logger.info('<Auth> - Start Login');
 
-        res.render('login');
+        res.json({ message: 'This route should be handled by Angular!' });
     };
 
     /**
@@ -98,6 +98,20 @@ class AuthController {
         res
             .status(200)
             .json({ token });
+    }
+
+    /**
+     * Verifies if the user is authenticated.
+     * This function is to be used as an express.js route handler.
+     * @param {Request} req express request
+     * @param {Response} res express response
+     * @returns {Promise<Response>} object with the property 'authenticated' set to true
+     */
+    isAuthenticated(req, res) {
+
+        res
+            .status(200)
+            .json({  authenticated: true });
     }
 }
 
