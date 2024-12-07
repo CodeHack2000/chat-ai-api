@@ -27,7 +27,7 @@ class InventoryService {
 
             if (indexNumber === 0) {
 
-                const cleanMessage = message + '\n\nForam encontrados os seguintes produtos à venda em Portugal: \n\n';
+                const cleanMessage = message + '\nForam encontrados os seguintes produtos à venda em Portugal: \n\n';
 
                 finalMessage.push(cleanMessage);
             }

@@ -2,7 +2,6 @@ const Express = require('express');
 const Session = require('express-session');
 const Passport = require('passport');
 const PostgresqlStore = require('connect-pg-simple')(Session);
-const Path = require('path');
 const Cors = require('cors');
 
 const serverConfig = require('@config/serverConfig');
@@ -68,11 +67,11 @@ const sessionStore = new PostgresqlStore({
 
 // Add sessions to the application
 app.use(Session({
-
     secret: serverConfig.sessionSecret,
     resave: false,
     saveUninitialized: false,
     store: sessionStore,
+    unset: 'destroy',
     cookie: {
         maxAge: 1000 * 60 * 60 * 24 // 24 hours
     }
@@ -83,7 +82,7 @@ app.disable('x-powered-by');
 
 const corsConfig = {
     origin: `http://${serverConfig.frontEndHost}:${serverConfig.frontEndPort}`,
-    method: 'GET, POST, PUT, DELETE',
+    method: 'GET, POST, PUT, DELETE, OPTIONS',
     allowedHeaders: 'Content-Type, Authorization',
     credentials: true
 };

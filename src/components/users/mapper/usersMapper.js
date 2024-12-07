@@ -43,7 +43,6 @@ class UsersMapper {
             avatar: user?.image,
             googleId: this.commonMapper.toString( user?.googleId ),
             emailValidationState: this.commonMapper.toString( user?.emailValidationState ),
-            createdAt: Moment().toDate(),
             updatedAt: Moment().toDate()
         };
     }

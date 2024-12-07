@@ -2,6 +2,8 @@ const AuthPassHashingService = require('../services/authPassHashingService');
 const JsonWebTokenService = require('../services/jsonWebTokenService');
 const BrevoEmailService = require('../services/brevoEmailService');
 
+const serverConfig = require('@config/serverConfig');
+
 class AuthPassController {
 
     constructor(Utils, DB) {
@@ -74,7 +76,7 @@ class AuthPassController {
                 if (user?.email && user?.googleId) {
                     
                     // Fill empty properties of the user with the data received
-                    const userToDb = this.commonMapper.fillEmptyProperties(user.dataValues, userData);
+                    const userToDb = this.commonMapper.fillEmptyProperties(userData, user.dataValues);
                     
                     await this.usersService.updUser(userToDb);
                     
@@ -160,11 +162,19 @@ class AuthPassController {
             .json(result.message);
     }
 
+    /**
+     * Logs in the user with the given credentials
+     * @param {Request} req express request
+     * @param {Response} res express response
+     * @returns {Promise<Response>} response with the result of the operation
+     */
     async login(req, res) {
 
         this.logger.info('<AuthPass> - Start Login');
 
-        return res.json({ message: 'This route should be handled by Angular!' });
+        res
+            .status(200)
+            .json({ success: true });
     }
 }
 

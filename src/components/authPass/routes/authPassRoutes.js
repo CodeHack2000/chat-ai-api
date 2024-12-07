@@ -50,7 +50,7 @@ class AuthPassRoutes {
             '/login',
             [
                 (req, res, next) => this.schemaValidationMiddleware(this.schemas.login, 'body')(req, res, next),
-                Passport.authenticate('local', { failureRedirect: '/' })
+                Passport.authenticate('local')
             ],
             (req, res) => this.controller.login(req, res)
         );

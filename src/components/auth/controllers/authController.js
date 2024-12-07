@@ -26,6 +26,8 @@ class AuthController {
 
             this.logger.info('<Auth> - Start Logout');
             this.logger.debug('<Auth> - Entity: ' + req?.user?.id);
+            
+            const sessionID = req.sessionID;
 
             req.logout((err) => {
 
@@ -34,16 +36,19 @@ class AuthController {
                     this.logger.error('<Auth> - Logout Error: ' + err);
                     return next(err);
                 }
-        
-                req.session.destroy((err) => {
-        
+
+                req.sessionStore.destroy(sessionID, (err) => {
                     if (err) {
-        
-                        this.logger.error('<Auth> - Session Error: ' + err);
-                        return next(err);
+                        this.logger.error('<Auth> - Store Destroy Error: ' + err);
+                        return res.status(500).json({ message: 'Failed to destroy session' });
                     }
-        
-                    res.redirect('/');
+    
+                    // Limpar o cookie de sessão no cliente
+                    res.clearCookie('connect.sid', { path: '/' });
+                    req.session = null;
+    
+                    this.logger.info('<Auth> - Logout Successful');
+                    return res.status(200).json({ message: 'Logout successful' });
                 });
             });
         }
@@ -54,32 +59,6 @@ class AuthController {
                 .status(500)
                 .json('Internal server error');
         }
-    };
-
-    /**
-     * Shows the home page of the authenticated user
-     * @param {Request} req express request
-     * @param {Response} res express response
-     * @returns {Promise<Response>} rendered home page
-     */
-    async home(req, res) {
-
-        this.logger.info('<Auth> - Start Home');
-
-        res.json({ message: 'This route should be handled by Angular!' });
-    };
-
-    /**
-     * Shows the login form
-     * @param {Request} req express request
-     * @param {Response} res express response
-     * @returns {Promise<Response>} rendered login form
-     */
-    async login(req, res) {
-
-        this.logger.info('<Auth> - Start Login');
-
-        res.json({ message: 'This route should be handled by Angular!' });
     };
 
     /**
@@ -108,6 +87,9 @@ class AuthController {
      * @returns {Promise<Response>} object with the property 'authenticated' set to true
      */
     isAuthenticated(req, res) {
+
+        const sessionID = req.sessionID;
+        console.log(sessionID);
 
         res
             .status(200)

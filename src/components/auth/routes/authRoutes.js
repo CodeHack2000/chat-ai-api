@@ -13,8 +13,6 @@ class AuthRoutes {
         this.authMiddleware = AuthMiddleware;
 
         this._generateInternalToken();
-        this._loginRoute();
-        this._homeRoute();
         this._logoutRoute();
         this._isAuthenticated();
     }
@@ -28,27 +26,11 @@ class AuthRoutes {
         );
     }
 
-    _loginRoute() {
-
-        this.router.get(
-            '/',
-            (req, res) => this.controller.login(req, res)
-        );
-    }
-
-    _homeRoute() {
-
-        this.router.get(
-            '/home',
-            (req, res, next) => this.authMiddleware.isLoggedIn(req, res, next),
-            (req, res) => this.controller.home(req, res)
-        );
-    }
-
     _logoutRoute() {
 
         this.router.post(
             '/logout',
+            (req, res, next) => this.authMiddleware.isLoggedIn(req, res, next),
             (req, res, next) => this.controller.logout(req, res, next)
         );
     }
