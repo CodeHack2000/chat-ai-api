@@ -29,15 +29,16 @@ class UsersService {
     }
 
     /**
-     * Insert a new user in the database from a google user profile
+     * Inserts a new user in the database using a Google profile
      * @param {Object} profile google user profile
+     * @param {Buffer} imageBuffer image buffer of the user's avatar
      * @returns {Promise<number>} id of the new user
      */
-    async insGoogleUser(profile) {
+    async insGoogleUser(profile, imageBuffer) {
 
         this.logger.info('<UsersService> - Getting user by google id');
 
-        const mappedUser = this.usersMapper.insUserByGoogle( profile );
+        const mappedUser = this.usersMapper.insUserByGoogle( profile, imageBuffer );
 
         return await UsersDB.insUser( mappedUser );
     }

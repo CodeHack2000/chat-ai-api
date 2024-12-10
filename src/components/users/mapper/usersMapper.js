@@ -48,16 +48,17 @@ class UsersMapper {
     }
 
     /**
-     * Maps a google profile to a user object that can be inserted in the database
-     * @param {Object} profile google profile
-     * @returns {Object} mapped user
+     * Maps a Google profile to a database model for inserting purposes
+     * @param {Object} profile Google profile
+     * @param {Buffer} imageBuffer image buffer of the user's avatar
+     * @returns {Object} mapped user with inserted fields
      */
-    insUserByGoogle(profile) {
+    insUserByGoogle(profile, imageBuffer) {
         return {
             googleId: this.commonMapper.toString( profile?.id ),
             name: this.commonMapper.toString( profile?.displayName ),
             email: this.commonMapper.toString( profile?.email ),
-            avatar: this.commonMapper.toString( profile?.picture ),
+            avatar: imageBuffer,
             emailValidationState: 'notValidated',
             createdAt: Moment().toDate(),
             updatedAt: Moment().toDate()

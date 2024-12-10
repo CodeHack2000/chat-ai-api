@@ -2,6 +2,7 @@ const Passport = require('passport');
 const { Strategy } = require('passport-google-oauth2');
 
 const AuthConfig = require('../config/authGoogleConfig');
+const AuthGoogleService = require('../services/authGoogleService');
 
 class AuthGoogleStrategyMiddleware {
 
@@ -12,6 +13,8 @@ class AuthGoogleStrategyMiddleware {
 
         this.logger = Logger;
         this.usersService = UsersService;
+
+        this.authGoogleService = new AuthGoogleService(Utils);
 
         this._configStrategy();
     }
@@ -34,6 +37,8 @@ class AuthGoogleStrategyMiddleware {
         async (request, accessToken, refreshToken, profile, done) => {
 
             try {
+
+                console.log(profile);
 
                 this.logger.info('<GoogleAuthMiddleware> - Start Login');
 
@@ -59,15 +64,18 @@ class AuthGoogleStrategyMiddleware {
                 if (!user?.id) {
 
                     this.logger.info('<GoogleAuthMiddleware> - User not found, try to insert it');
-                    user = await this.usersService.insGoogleUser(profile);
+                    const imageBuffer = await this.authGoogleService.getGoogleAvatar(profile?.picture);
+                    user = await this.usersService.insGoogleUser(profile, imageBuffer);
                 }
                 // If the user exists, but the googleId is null, update it
                 else if (!user?.googleId) {
 
                     this.logger.info('<GoogleAuthMiddleware> - User found, but googleId is null, try to update it');
 
+                    const imageBuffer = await this.authGoogleService.getGoogleAvatar(profile?.picture);
+
                     user.googleId = profile?.id,
-                    user.image = user?.avatar || profile?.picture;
+                    user.image = user?.avatar || imageBuffer;
 
                     await this.usersService.updUser(user);
                 }
@@ -84,7 +92,8 @@ class AuthGoogleStrategyMiddleware {
                 return done(null, {
                     id: user.id,
                     name: user.name,
-                    profiles: user.profiles
+                    profiles: user.profiles,
+                    avatar: user.avatar
                 });
             }
             catch (error) {
@@ -98,7 +107,12 @@ class AuthGoogleStrategyMiddleware {
         // Serializes the user for the session
         Passport.serializeUser((user, done) => {
 
-            done(null, { id: user.id, name: user.name, profiles: user.profiles });
+            done(null, {
+                id: user.id,
+                name: user.name,
+                profiles: user.profiles,
+                avatar: user.avatar
+            });
         });
 
         // Deserializes the user of the session
@@ -110,7 +124,8 @@ class AuthGoogleStrategyMiddleware {
                 done(null, {
                     id: user.id,
                     name: user.name,
-                    profiles: user.profiles
+                    profiles: user.profiles,
+                    avatar: user.avatar
                 });
             }
             catch (error) {

@@ -88,12 +88,15 @@ class AuthController {
      */
     isAuthenticated(req, res) {
 
-        const sessionID = req.sessionID;
-        console.log(sessionID);
+        const userData = {
+            profiles: req.user.profiles,
+            username: req.user.name,
+            avatar: req.user.avatar?.toString('base64') || null,
+        };
 
         res
             .status(200)
-            .json({  authenticated: true });
+            .json(userData);
     }
 }
 
