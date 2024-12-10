@@ -54,7 +54,7 @@ class HistoryMapper {
         const productsRegex = /###\[.*?\]/g;
         const historyRegex = /!!!\[.*?\]/g;
         const trashRegex = /[#]{3}|[!]{3}/g;
-        const productsPharmRegex = /\n\nForam encontrados os seguintes produtos à venda em Portugal:(.*)/s;
+        const productsPharmRegex = /\nForam encontrados os seguintes produtos à venda em Portugal:(.*)/s;
 
         const recommendedProductsMatch = productsPharmRegex.exec(history.botMessage);
         history.recommendedProducts = recommendedProductsMatch?.[1]?.trim() || '';

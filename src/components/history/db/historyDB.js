@@ -56,7 +56,7 @@ class HistoryDB {
             where: {
                 userId
             },
-            order: [['createdAt', 'DESC']]
+            order: [['createdAt', 'ASC']]
         });
     }
 }

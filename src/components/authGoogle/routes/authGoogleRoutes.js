@@ -33,10 +33,10 @@ class AuthGoogleRouter {
             Passport.authenticate('google', {
 
                 // If the entity is successfully authenticated
-                successRedirect: `http://${serverConfig.frontEndHost}:${serverConfig.frontEndPort}/chat`,
+                successRedirect: `http://${serverConfig.frontEndHost}:${serverConfig.frontEndPort}/`,
         
                 // If the entity fails in authenticate
-                failureRedirect: `http://${serverConfig.frontEndHost}:${serverConfig.frontEndPort}/auth/google/failure`
+                failureRedirect: `http://${serverConfig.frontEndHost}:${serverConfig.frontEndPort}/login`
             })
         );
     }
