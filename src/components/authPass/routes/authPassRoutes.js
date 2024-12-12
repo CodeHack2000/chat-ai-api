@@ -8,10 +8,9 @@ class AuthPassRoutes {
 
     constructor(Utils, DB, Middlewares) {
 
-        const { ImageFormHandlingMiddleware, SchemaValidationMiddleware } = Middlewares;
+        const { SchemaValidationMiddleware } = Middlewares;
 
         this.schemaValidationMiddleware = SchemaValidationMiddleware;
-        this.imageFormHandlingMiddleware = ImageFormHandlingMiddleware;
         this.router = Express.Router();
         
         this.schemas = AuthPassRouterSchemas;
@@ -27,7 +26,6 @@ class AuthPassRoutes {
         this.router.post(
             '/register', 
             [
-                this.imageFormHandlingMiddleware.single('avatar'),
                 (req, res, next) => this.schemaValidationMiddleware(this.schemas.register, 'body')(req, res, next)
             ],
             (req, res) => this.controller.register(req, res)

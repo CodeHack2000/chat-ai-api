@@ -27,8 +27,11 @@ const _utils = {
     CommonMapper: utils.commonMapper
 };
 
+// Main auth
+const auth = new AuthComponent({  Logger: utils.logger });
+
 // DB
-const usersData = new UsersComponent(_utils);
+const usersData = new UsersComponent(_utils, { ImageFormHandlingMiddleware: SharedMiddlewares.imageFormHandlingMiddleware, AuthMiddleware: auth.middlewares });
 
 // DB pack
 const _db = {
@@ -36,8 +39,7 @@ const _db = {
 };
 
 // Auth
-const auth = new AuthComponent({  Logger: utils.logger });
-const authPass = new AuthPassComponent(_utils, _db, { ImageFormHandlingMiddleware: SharedMiddlewares.imageFormHandlingMiddleware, SchemaValidationMiddleware: SharedMiddlewares.schemaValidationMiddleware });
+const authPass = new AuthPassComponent(_utils, _db, { SchemaValidationMiddleware: SharedMiddlewares.schemaValidationMiddleware });
 const authGoogle = new AuthGoogleComponent({  Logger: utils.logger }, _db);
 
 // Middlewares pack
@@ -103,5 +105,6 @@ app.use('/auth/pass', authPass.router);
 app.use('/auth/google', authGoogle.router);
 app.use('/openAi', openAi.router);
 app.use('/history', history.router);
+app.use('/users', usersData.router);
 
 module.exports = app;

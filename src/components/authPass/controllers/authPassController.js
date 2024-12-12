@@ -2,8 +2,6 @@ const AuthPassHashingService = require('../services/authPassHashingService');
 const JsonWebTokenService = require('../services/jsonWebTokenService');
 const BrevoEmailService = require('../services/brevoEmailService');
 
-const serverConfig = require('@config/serverConfig');
-
 class AuthPassController {
 
     constructor(Utils, DB) {
