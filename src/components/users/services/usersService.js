@@ -29,10 +29,10 @@ class UsersService {
     }
 
     /**
-     * Inserts a new user in the database using a Google profile
-     * @param {Object} profile google user profile
-     * @param {Buffer} imageBuffer image buffer of the user's avatar
-     * @returns {Promise<number>} id of the new user
+     * Inserts a Google user into the database.
+     * @param {Object} profile - The Google user profile.
+     * @param {Buffer} imageBuffer - The image buffer of the user's avatar.
+     * @returns {Promise<Object>} The newly inserted user object.
      */
     async insGoogleUser(profile, imageBuffer) {
 
@@ -44,9 +44,9 @@ class UsersService {
     }
 
     /**
-     * Insert a new user in the database
+     * Inserts a new user in the database
      * @param {Object} user new user to insert
-     * @returns {Promise<number>} id of the new user
+     * @returns {Promise<Object>} user with the given id
      */
     async insUser( user ) {
 

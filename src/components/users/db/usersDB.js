@@ -17,13 +17,13 @@ class UsersDB {
     /**
      * Insert a new user in the database
      * @param {Object} user new user to insert
-     * @returns {Promise<uuid>} id of the new user
+     * @returns {Promise<Object>} user with the given id
      */
     static async insUser(user) {
 
         const createUser = await users.create(user);
 
-        return createUser.id;
+        return createUser;
     }
 
     /**

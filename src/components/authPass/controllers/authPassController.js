@@ -85,11 +85,11 @@ class AuthPassController {
                 // If the user have not been logged with google, insert the user
                 else {
                     
-                    userData.id = await this.usersService.insUser(userData);
+                    const newUser = await this.usersService.insUser(userData);
                     
                     this.logger.info('<AuthPass> - User inserted');
                     result.status = 201;
-                    result.message = 'Created user ' + userData.id;
+                    result.message = 'Created user ' + newUser.id;
                 }
                 
                 // Generate email validation token
