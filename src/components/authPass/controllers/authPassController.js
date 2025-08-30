@@ -91,7 +91,7 @@ class AuthPassController {
                     result.status = 201;
                     result.message = 'Created user ' + newUser.id;
                 }
-                
+        
                 // Generate email validation token
                 const token = this.jsonWebTokenService.generateConfirmationToken(userData.email);
                 

@@ -83,7 +83,10 @@ app.use(Session({
 app.disable('x-powered-by');
 
 const corsConfig = {
-    origin: `http://${serverConfig.frontEndHost}:${serverConfig.frontEndPort}`,
+    origin: [
+        `http://${serverConfig.frontEndContainer}:${serverConfig.frontEndPort}`,
+        `http://${serverConfig.frontEndHost}:${serverConfig.frontEndPort}`
+    ],
     method: 'GET, POST, PUT, DELETE, OPTIONS',
     allowedHeaders: 'Content-Type, Authorization',
     credentials: true

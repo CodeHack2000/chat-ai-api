@@ -9,5 +9,6 @@ module.exports = {
     externalHost: process.env.EXTERNAL_HOST,
     appName: process.env.APP_NAME,
     frontEndHost: process.env.FRONTEND_HOST,
-    frontEndPort: process.env.FRONTEND_PORT
+    frontEndPort: process.env.FRONTEND_PORT,
+    frontEndContainer: process.env.FRONTEND_CONTAINER
 };
